@@ -15,38 +15,14 @@
  *
  * created by shailshah, 10/27/21
  */
-package com.shahshail.android.flipgridchallenge
+package com.shahshail.android.flipgridchallenge.utils
 
-import android.app.Application
-import android.util.Log
-import dagger.hilt.android.HiltAndroidApp
+object Constants {
 
-@HiltAndroidApp
-class FlipgridApplication: Application() {
-
-    //region Nested Classes
-
-    //endregion
-
-    //region Statics
-    
-    companion object {
-        private const val TAG = "FlipgridApplication"
-    }
-    
-    //endregion
-
-    //region Lifecycle
-
-    override fun onCreate() {
-        super.onCreate()
-        Log.d(TAG, "onCreate: ")
-    }
-    
-    //endregion
-    
-    
-    
-
-    
+    // validations
+    const val MAX_FIRST_NAME_LENGTH = 20
+    const val MAX_PASSWORD_LENGTH = 20
+    const val MAX_EMAIL_ADDRESS_LENGTH = 40
+    const val MAX_WEB_URL_LINK_LENGTH = 50
+    const val MAX_ERROR_LINES = 10
 }

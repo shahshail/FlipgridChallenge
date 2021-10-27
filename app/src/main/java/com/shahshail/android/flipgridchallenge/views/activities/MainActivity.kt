@@ -15,38 +15,21 @@
  *
  * created by shailshah, 10/27/21
  */
-package com.shahshail.android.flipgridchallenge
+package com.shahshail.android.flipgridchallenge.views.activities
 
-import android.app.Application
-import android.util.Log
-import dagger.hilt.android.HiltAndroidApp
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import com.shahshail.android.flipgridchallenge.R
+import dagger.hilt.android.AndroidEntryPoint
 
-@HiltAndroidApp
-class FlipgridApplication: Application() {
+@AndroidEntryPoint
+class MainActivity : AppCompatActivity() {
 
-    //region Nested Classes
-
-    //endregion
-
-    //region Statics
-    
-    companion object {
-        private const val TAG = "FlipgridApplication"
+    // region lifecycle
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
     }
-    
-    //endregion
 
-    //region Lifecycle
-
-    override fun onCreate() {
-        super.onCreate()
-        Log.d(TAG, "onCreate: ")
-    }
-    
-    //endregion
-    
-    
-    
-
-    
+    // endregion
 }

@@ -6,6 +6,6 @@
 
     <fragment
         android:id="@+id/createProfileFragment"
-        android:name="com.shahshail.android.flipgridchallenge.views.CreateProfileFragment"
+        android:name="com.shahshail.android.flipgridchallenge.views.fragments.CreateProfileFragment"
         android:label="CreateProfileFragment" />
 </navigation>
