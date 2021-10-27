@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <dimen name="margin_large">20dp</dimen>
+    <dimen name="margin_normal">16dp</dimen>
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_extra_small">4dp</dimen>
+
+    <dimen name="profile_image_height">170dp</dimen>
+    <dimen name="profile_image_width">130dp</dimen>
+
+    <!-- font sizes -->
+    <dimen name="font_extra_large">32sp</dimen>
+    <dimen name="font_large">24sp</dimen>
+    <dimen name="font_medium">18sp</dimen>
+    <dimen name="font_primary">15sp</dimen>
+    <dimen name="font_secondary">13sp</dimen>
+
+    <!-- rounded radius -->
+    <dimen name="default_corner_radius">12dp</dimen>
+
+</resources>
