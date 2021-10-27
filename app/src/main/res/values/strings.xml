@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">FlipgridChallenge</string>
+
+    <string name="first_name">First Name</string>
+    <string name="email_address">Email Address</string>
+    <string name="password">Password</string>
+    <string name="website">Website</string>
+    <string name="submit">Submit</string>
+    <string name="profile_creation_header">Profile creation</string>
+    <string name="profile_creation_instruction">Use the form below to submit your portfolio. An email and password are required.</string>
+
+    <!-- validations -->
+    <string name="first_name_invalid">• Please enter a valid First Name.</string>
+    <string name="email_address_required">• Please enter Email Address.</string>
+    <string name="email_address_invalid">• Please enter a valid Email Address.</string>
+    <string name="password_required">• Please enter Password.</string>
+    <string name="password_missing_special_character">• Password must contain at lest one special character.</string>
+    <string name="password_missing_digit">• Password must contain at lest one digit.</string>
+    <string name="password_missing_capital">• Password must contain at lest one capital letter.</string>
+    <string name="website_invalid">• Please enter a valid website.</string>
 </resources>

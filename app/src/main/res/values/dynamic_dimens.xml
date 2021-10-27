@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- guidelines -->
+    <item name="end_constraint_guideline_percent" format="float" type="dimen">1.0</item>
+    <item name="start_constraint_guideline_percent" format="float" type="dimen">0.0</item>
+</resources>
