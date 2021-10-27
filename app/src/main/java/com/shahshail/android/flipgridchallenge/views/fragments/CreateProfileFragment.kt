@@ -31,6 +31,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.shahshail.android.flipgridchallenge.R
@@ -117,8 +118,8 @@ class CreateProfileFragment : Fragment() {
     }
 
     private fun setupFirstName(view: View) = with(view) {
-        firstNameTextInputLayout = findViewById(R.id.first_name_text_input_layout)
-        firstNameEditText = findViewById(R.id.firstName_edit_text)
+        firstNameTextInputLayout = findViewById(R.id.create_profile_first_name_text_input_layout)
+        firstNameEditText = findViewById(R.id.create_profile_firstName_edit_text)
         firstNameTextInputLayout.hint = getString(R.string.first_name)
         firstNameEditText.afterTextChanged {
             firstNameTextInputLayout.clearError()
@@ -126,8 +127,8 @@ class CreateProfileFragment : Fragment() {
     }
 
     private fun setupEmailAddress(view: View) = with(view) {
-        emailAddressTextInputLayout = findViewById(R.id.email_text_input_layout)
-        emailAddressEditText = findViewById(R.id.email_edit_text)
+        emailAddressTextInputLayout = findViewById(R.id.create_profile_email_text_input_layout)
+        emailAddressEditText = findViewById(R.id.create_profile_email_edit_text)
         emailAddressTextInputLayout.hint = getString(R.string.email_address)
         emailAddressEditText.afterTextChanged {
             emailAddressTextInputLayout.clearError()
@@ -135,8 +136,8 @@ class CreateProfileFragment : Fragment() {
     }
 
     private fun setupPassword(view: View) = with(view) {
-        passwordTextInputLayout = findViewById(R.id.password_text_input_layout)
-        passwordEditText = findViewById(R.id.password_edit_text)
+        passwordTextInputLayout = findViewById(R.id.create_profile_password_text_input_layout)
+        passwordEditText = findViewById(R.id.create_profile_password_edit_text)
         passwordTextInputLayout.hint = getString(R.string.password)
         passwordEditText.afterTextChanged {
             passwordTextInputLayout.clearError()
@@ -144,8 +145,8 @@ class CreateProfileFragment : Fragment() {
     }
 
     private fun setupWebUrl(view: View) = with(view) {
-        webUrlTextInputLayout = findViewById(R.id.website_text_input_layout)
-        webUrlEditText = findViewById(R.id.website_edit_text)
+        webUrlTextInputLayout = findViewById(R.id.create_profile_website_text_input_layout)
+        webUrlEditText = findViewById(R.id.create_profile_website_edit_text)
         webUrlTextInputLayout.hint = getString(R.string.website)
         webUrlEditText.afterTextChanged {
             webUrlTextInputLayout.clearError()
@@ -161,7 +162,7 @@ class CreateProfileFragment : Fragment() {
     }
 
     private fun setupSubmitButton(view: View) = with(view) {
-        submitButton = findViewById(R.id.submit_button)
+        submitButton = findViewById(R.id.create_profile_submit_button)
         submitButton.setOnClickListener {
             val validations = listOf(
                 validateFirstName(),
@@ -175,6 +176,8 @@ class CreateProfileFragment : Fragment() {
                 val password = passwordEditText.text.toString()
                 val website = webUrlEditText.text?.toString()
                 val userProfile = UserProfileDto(firstName, email, password, website, null)
+                val action = CreateProfileFragmentDirections.actionCreateProfileToProfilePreview(userProfile)
+                findNavController().navigate(action)
             }
         }
     }
@@ -238,5 +241,4 @@ class CreateProfileFragment : Fragment() {
     }
 
     // endregion
-
 }

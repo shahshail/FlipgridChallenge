@@ -20,6 +20,10 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="LinkTextStyle" parent="BaseTextStyle">
+        <item name="android:textColor">@color/blue</item>
+    </style>
+
     <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="shapeAppearance">@style/TextInputLayoutShapeAppearance</item>
         <item name="strokeColor">@color/light_gray</item>

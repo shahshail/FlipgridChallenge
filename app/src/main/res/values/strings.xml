@@ -6,6 +6,8 @@
     <string name="password">Password</string>
     <string name="website">Website</string>
     <string name="submit">Submit</string>
+    <string name="sign_in">Sign In</string>
+    <string name="tap_to_add_avatar">Tap to add avatar</string>
     <string name="profile_creation_header">Profile creation</string>
     <string name="profile_creation_instruction">Use the form below to submit your portfolio. An email and password are required.</string>
 
@@ -18,4 +20,6 @@
     <string name="password_missing_digit">• Password must contain at lest one digit.</string>
     <string name="password_missing_capital">• Password must contain at lest one capital letter.</string>
     <string name="website_invalid">• Please enter a valid website.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

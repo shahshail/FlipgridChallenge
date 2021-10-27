@@ -19,8 +19,10 @@ package com.shahshail.android.flipgridchallenge.utils
 
 import android.util.Patterns
 import com.shahshail.android.flipgridchallenge.R
+import dagger.hilt.android.scopes.ActivityScoped
 import javax.inject.Inject
 
+@ActivityScoped
 class CreateProfileValidator @Inject constructor() {
 
     enum class CreateProfileErrorFlag(val resId: Int) {

@@ -56,7 +56,7 @@
             android:gravity="center"
             android:maxLines="5"
             android:padding="@dimen/margin_small"
-            android:text="Tap to add avatar"/>
+            android:text="@string/tap_to_add_avatar"/>
 
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
