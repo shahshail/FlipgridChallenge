@@ -35,10 +35,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.shahshail.android.flipgridchallenge.R
 import com.shahshail.android.flipgridchallenge.models.UserProfileDto
-import com.shahshail.android.flipgridchallenge.utils.CreateProfileValidator
-import com.shahshail.android.flipgridchallenge.utils.clearError
-import com.shahshail.android.flipgridchallenge.utils.setAvatarRoundedBitmap
-import com.shahshail.android.flipgridchallenge.utils.setErrorWithSeparator
+import com.shahshail.android.flipgridchallenge.utils.*
 import com.shahshail.android.flipgridchallenge.views.viewmodels.CreateProfileViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -123,10 +120,8 @@ class CreateProfileFragment : Fragment() {
         firstNameTextInputLayout = findViewById(R.id.first_name_text_input_layout)
         firstNameEditText = findViewById(R.id.firstName_edit_text)
         firstNameTextInputLayout.hint = getString(R.string.first_name)
-        firstNameEditText.setOnFocusChangeListener { v, hasFocus ->
-            if (hasFocus) {
-                firstNameTextInputLayout.clearError()
-            }
+        firstNameEditText.afterTextChanged {
+            firstNameTextInputLayout.clearError()
         }
     }
 
@@ -134,10 +129,8 @@ class CreateProfileFragment : Fragment() {
         emailAddressTextInputLayout = findViewById(R.id.email_text_input_layout)
         emailAddressEditText = findViewById(R.id.email_edit_text)
         emailAddressTextInputLayout.hint = getString(R.string.email_address)
-        firstNameEditText.setOnFocusChangeListener { v, hasFocus ->
-            if (hasFocus) {
-                firstNameTextInputLayout.clearError()
-            }
+        emailAddressEditText.afterTextChanged {
+            emailAddressTextInputLayout.clearError()
         }
     }
 
@@ -145,10 +138,8 @@ class CreateProfileFragment : Fragment() {
         passwordTextInputLayout = findViewById(R.id.password_text_input_layout)
         passwordEditText = findViewById(R.id.password_edit_text)
         passwordTextInputLayout.hint = getString(R.string.password)
-        firstNameEditText.setOnFocusChangeListener { v, hasFocus ->
-            if (hasFocus) {
-                firstNameTextInputLayout.clearError()
-            }
+        passwordEditText.afterTextChanged {
+            passwordTextInputLayout.clearError()
         }
     }
 
@@ -156,10 +147,8 @@ class CreateProfileFragment : Fragment() {
         webUrlTextInputLayout = findViewById(R.id.website_text_input_layout)
         webUrlEditText = findViewById(R.id.website_edit_text)
         webUrlTextInputLayout.hint = getString(R.string.website)
-        firstNameEditText.setOnFocusChangeListener { v, hasFocus ->
-            if (hasFocus) {
-                firstNameTextInputLayout.clearError()
-            }
+        webUrlEditText.afterTextChanged {
+            webUrlTextInputLayout.clearError()
         }
     }
 
