@@ -15,38 +15,17 @@
  *
  * created by shailshah, 10/27/21
  */
-package com.shahshail.android.flipgridchallenge
+package com.shahshail.android.flipgridchallenge.models
 
-import android.app.Application
-import android.util.Log
-import dagger.hilt.android.HiltAndroidApp
+import android.graphics.Bitmap
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
-@HiltAndroidApp
-class FlipgridApplication: Application() {
-
-    //region Nested Classes
-
-    //endregion
-
-    //region Statics
-    
-    companion object {
-        private const val TAG = "FlipgridApplication"
-    }
-    
-    //endregion
-
-    //region Lifecycle
-
-    override fun onCreate() {
-        super.onCreate()
-        Log.d(TAG, "onCreate: ")
-    }
-    
-    //endregion
-    
-    
-    
-
-    
-}
+@Parcelize
+data class UserProfileDto (
+    val firstName: String?,
+    val emailAddress: String,
+    val password: String,
+    val website: String?,
+    val profilePicture: Bitmap?
+) : Parcelable

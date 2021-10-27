@@ -15,38 +15,14 @@
  *
  * created by shailshah, 10/27/21
  */
-package com.shahshail.android.flipgridchallenge
+package com.shahshail.android.flipgridchallenge.views.viewmodels
 
-import android.app.Application
-import android.util.Log
-import dagger.hilt.android.HiltAndroidApp
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-@HiltAndroidApp
-class FlipgridApplication: Application() {
+@HiltViewModel
+class CreateProfileViewModel @Inject constructor(private val savedStateHandle: SavedStateHandle) : ViewModel() {
 
-    //region Nested Classes
-
-    //endregion
-
-    //region Statics
-    
-    companion object {
-        private const val TAG = "FlipgridApplication"
-    }
-    
-    //endregion
-
-    //region Lifecycle
-
-    override fun onCreate() {
-        super.onCreate()
-        Log.d(TAG, "onCreate: ")
-    }
-    
-    //endregion
-    
-    
-    
-
-    
 }
