@@ -19,8 +19,10 @@ package com.shahshail.android.flipgridchallenge.views.fragments
 
 import android.app.Activity
 import android.content.ActivityNotFoundException
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import androidx.fragment.app.Fragment
@@ -29,6 +31,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
@@ -54,7 +57,7 @@ class CreateProfileFragment : Fragment() {
 
     // region member variables
     val viewModel by viewModels<CreateProfileViewModel>()
-
+    private val imageCaptureRequestCode = 11
     @Inject
     lateinit var createProfileValidator: CreateProfileValidator
 
@@ -71,7 +74,7 @@ class CreateProfileFragment : Fragment() {
     private lateinit var webUrlTextInputLayout: TextInputLayout
     private lateinit var webUrlEditText: TextInputEditText
     private lateinit var submitButton: AppCompatButton
-    private val imageCaptureRequestCode = 11
+    private var cameraAppNotInstalledDialog: AlertDialog? = null
 
     // endregion
 
@@ -94,6 +97,11 @@ class CreateProfileFragment : Fragment() {
             addAvatarTextView.visibility = View.GONE
             addAvatarImageButton.setAvatarRoundedBitmap(imageBitmap)
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        cameraAppNotInstalledDialog?.dismiss()
     }
 
     //endregion
@@ -236,7 +244,40 @@ class CreateProfileFragment : Fragment() {
         try {
             startActivityForResult(takePictureIntent, imageCaptureRequestCode)
         } catch (e: ActivityNotFoundException) {
+            // if camera app is not installed then ask the user to install it from playstore
+            showInstallCameraAppDialog()
+        }
+    }
 
+    private fun showInstallCameraAppDialog() {
+        if (cameraAppNotInstalledDialog?.isShowing == true) {
+            cameraAppNotInstalledDialog?.dismiss()
+        }
+
+        cameraAppNotInstalledDialog = activity?.let {
+            val builder = AlertDialog.Builder(it)
+            builder.apply {
+                setTitle(R.string.app_is_not_installed)
+                setMessage(R.string.install_camera_app_from_plastore)
+                setPositiveButton(R.string.ok) { dialog, id ->
+                    launchPlayStore()
+                }
+                setNegativeButton(R.string.cancel) { dialog, id ->
+                    dialog.dismiss()
+                }
+            }
+            builder.create()
+        }
+        cameraAppNotInstalledDialog?.show()
+    }
+
+    private fun launchPlayStore() {
+        try {
+            // try to navigate to camera app
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=${Constants.GOOGLE_CAMERA_APP_ID}")))
+        } catch (e: ActivityNotFoundException) {
+            // if the app is not found then simply launch playstore
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com")))
         }
     }
 

@@ -25,4 +25,7 @@ object Constants {
     const val MAX_EMAIL_ADDRESS_LENGTH = 40
     const val MAX_WEB_URL_LINK_LENGTH = 50
     const val MAX_ERROR_LINES = 10
+
+    //camera
+    const val GOOGLE_CAMERA_APP_ID = "com.google.android.GoogleCamera"
 }

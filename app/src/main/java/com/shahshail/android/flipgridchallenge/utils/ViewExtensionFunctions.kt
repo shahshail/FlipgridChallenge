@@ -18,6 +18,7 @@
 package com.shahshail.android.flipgridchallenge.utils
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.method.LinkMovementMethod
@@ -28,6 +29,7 @@ import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.shahshail.android.flipgridchallenge.R
+
 
 /**
  * helper view extensions
@@ -80,4 +82,8 @@ fun ImageButton.setAvatarRoundedBitmap(bitmap: Bitmap) {
     val dr: RoundedBitmapDrawable = RoundedBitmapDrawableFactory.create(resources, bitmap)
     dr.cornerRadius = resources.getDimension(R.dimen.default_corner_radius)
     setImageDrawable(dr)
+}
+
+fun TextView.makeItLink() {
+    movementMethod = LinkMovementMethod.getInstance()
 }
