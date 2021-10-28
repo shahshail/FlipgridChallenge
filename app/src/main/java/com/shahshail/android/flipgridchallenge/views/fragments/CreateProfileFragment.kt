@@ -25,6 +25,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -53,6 +54,11 @@ class CreateProfileFragment : Fragment() {
 
     //region Statics
 
+    companion object {
+        private const val TAG = "CreateProfileFragment"
+        private const val IMAGE_DATA = "data"
+    }
+    
     // endregion
 
     // region member variables
@@ -75,6 +81,7 @@ class CreateProfileFragment : Fragment() {
     private lateinit var webUrlEditText: TextInputEditText
     private lateinit var submitButton: AppCompatButton
     private var cameraAppNotInstalledDialog: AlertDialog? = null
+    private var userProfileBitmap: Bitmap? = null
 
     // endregion
 
@@ -93,15 +100,21 @@ class CreateProfileFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == imageCaptureRequestCode && resultCode == Activity.RESULT_OK) {
-            val imageBitmap = data?.extras?.get("data") as Bitmap
-            addAvatarTextView.visibility = View.GONE
-            addAvatarImageButton.setAvatarRoundedBitmap(imageBitmap)
+            val imageBitmap = data?.extras?.get(IMAGE_DATA) as? Bitmap
+            imageBitmap?.let { bitmap ->
+                userProfileBitmap = bitmap
+                addAvatarTextView.visibility = View.GONE
+                addAvatarImageButton.setAvatarRoundedBitmap(bitmap)
+            }
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         cameraAppNotInstalledDialog?.dismiss()
+        userProfileBitmap?.let { bitmap ->
+            viewModel.saveUserPicture(bitmap)
+        }
     }
 
     //endregion
@@ -109,6 +122,7 @@ class CreateProfileFragment : Fragment() {
     // region private functions
 
     private fun initViews(view: View) {
+        Log.d(TAG, "initViews: ")
         setupTextViews(view)
         setupFirstName(view)
         setupPassword(view)
@@ -128,6 +142,7 @@ class CreateProfileFragment : Fragment() {
     private fun setupFirstName(view: View) = with(view) {
         firstNameTextInputLayout = findViewById(R.id.create_profile_first_name_text_input_layout)
         firstNameEditText = findViewById(R.id.create_profile_firstName_edit_text)
+        firstNameEditText.maxLines = Constants.MAX_FIRST_NAME_LENGTH
         firstNameTextInputLayout.hint = getString(R.string.first_name)
         firstNameEditText.afterTextChanged {
             firstNameTextInputLayout.clearError()
@@ -137,6 +152,7 @@ class CreateProfileFragment : Fragment() {
     private fun setupEmailAddress(view: View) = with(view) {
         emailAddressTextInputLayout = findViewById(R.id.create_profile_email_text_input_layout)
         emailAddressEditText = findViewById(R.id.create_profile_email_edit_text)
+        emailAddressEditText.maxLines = Constants.MAX_EMAIL_ADDRESS_LENGTH
         emailAddressTextInputLayout.hint = getString(R.string.email_address)
         emailAddressEditText.afterTextChanged {
             emailAddressTextInputLayout.clearError()
@@ -146,6 +162,7 @@ class CreateProfileFragment : Fragment() {
     private fun setupPassword(view: View) = with(view) {
         passwordTextInputLayout = findViewById(R.id.create_profile_password_text_input_layout)
         passwordEditText = findViewById(R.id.create_profile_password_edit_text)
+        passwordEditText.maxLines = Constants.MAX_PASSWORD_LENGTH
         passwordTextInputLayout.hint = getString(R.string.password)
         passwordEditText.afterTextChanged {
             passwordTextInputLayout.clearError()
@@ -155,6 +172,7 @@ class CreateProfileFragment : Fragment() {
     private fun setupWebUrl(view: View) = with(view) {
         webUrlTextInputLayout = findViewById(R.id.create_profile_website_text_input_layout)
         webUrlEditText = findViewById(R.id.create_profile_website_edit_text)
+        webUrlEditText.maxLines = Constants.MAX_WEB_URL_LINK_LENGTH
         webUrlTextInputLayout.hint = getString(R.string.website)
         webUrlEditText.afterTextChanged {
             webUrlTextInputLayout.clearError()
@@ -164,6 +182,12 @@ class CreateProfileFragment : Fragment() {
     private fun setupAvatarView(view: View) = with(view) {
         addAvatarImageButton = findViewById(R.id.profile_image_button)
         addAvatarTextView = findViewById(R.id.add_avatar_text_view)
+        val cachedPicture = viewModel.getUserProfilePicture()
+        cachedPicture?.let { bitmap ->
+            userProfileBitmap = bitmap
+            addAvatarTextView.visibility = View.GONE
+            addAvatarImageButton.setAvatarRoundedBitmap(bitmap)
+        }
         addAvatarImageButton.setOnClickListener {
             takePhoto()
         }
@@ -172,26 +196,33 @@ class CreateProfileFragment : Fragment() {
     private fun setupSubmitButton(view: View) = with(view) {
         submitButton = findViewById(R.id.create_profile_submit_button)
         submitButton.setOnClickListener {
+            // validate all fields
             val validations = listOf(
                 validateFirstName(),
                 validateEmailAddress(),
                 validatePassword(),
                 validateWebsite()
             )
-            if (!validations.any { false }) {
-                val firstName = firstNameEditText.text?.toString()
-                val email = emailAddressEditText.text.toString()
-                val password = passwordEditText.text.toString()
-                val website = webUrlEditText.text?.toString()
-                val userProfile = UserProfileDto(firstName, email, password, website, null)
+
+            val isValidationPassed = !validations.contains(false)
+
+            // if validation successful then navigate to profile preview
+            if (isValidationPassed) {
+                val firstName = firstNameEditText.text?.toString()?.trim()
+                val email = emailAddressEditText.text.toString().trim()
+                val password = passwordEditText.text.toString().trim()
+                val website = webUrlEditText.text?.toString()?.trim()
+                val userProfile = UserProfileDto(firstName, email, password, website, userProfileBitmap)
                 val action = CreateProfileFragmentDirections.actionCreateProfileToProfilePreview(userProfile)
                 findNavController().navigate(action)
+            } else {
+                Log.w(TAG, "setupSubmitButton: validations failed")
             }
         }
     }
 
     private fun validateFirstName(): Boolean {
-        val text = firstNameEditText.text?.toString()
+        val text = firstNameEditText.text?.toString()?.trim()
         val flags = createProfileValidator.validateFirstName(text)
         if (flags.isEmpty()) {
             return true
@@ -201,7 +232,7 @@ class CreateProfileFragment : Fragment() {
     }
 
     private fun validateEmailAddress(): Boolean {
-        val text = emailAddressEditText.text?.toString()
+        val text = emailAddressEditText.text?.toString()?.trim()
         val flags = createProfileValidator.validateEmailAddress(text)
         if (flags.isEmpty()) {
             return true
@@ -211,7 +242,7 @@ class CreateProfileFragment : Fragment() {
     }
 
     private fun validatePassword(): Boolean {
-        val text = passwordEditText.text?.toString()
+        val text = passwordEditText.text?.toString()?.trim()
         val flags = createProfileValidator.validatePassword(text)
         if (flags.isEmpty()) {
             return true
@@ -221,7 +252,7 @@ class CreateProfileFragment : Fragment() {
     }
 
     private fun validateWebsite(): Boolean {
-        val text = webUrlEditText.text?.toString()
+        val text = webUrlEditText.text?.toString()?.trim()
         val flags = createProfileValidator.validateWebsite(text)
         if (flags.isEmpty()) {
             return true
@@ -245,6 +276,7 @@ class CreateProfileFragment : Fragment() {
             startActivityForResult(takePictureIntent, imageCaptureRequestCode)
         } catch (e: ActivityNotFoundException) {
             // if camera app is not installed then ask the user to install it from playstore
+            Log.w(TAG, "takePhoto: camera app is not found...")
             showInstallCameraAppDialog()
         }
     }
@@ -259,7 +291,7 @@ class CreateProfileFragment : Fragment() {
             builder.apply {
                 setTitle(R.string.app_is_not_installed)
                 setMessage(R.string.install_camera_app_from_plastore)
-                setPositiveButton(R.string.ok) { dialog, id ->
+                setPositiveButton(R.string.store) { dialog, id ->
                     launchPlayStore()
                 }
                 setNegativeButton(R.string.cancel) { dialog, id ->
@@ -268,6 +300,7 @@ class CreateProfileFragment : Fragment() {
             }
             builder.create()
         }
+
         cameraAppNotInstalledDialog?.show()
     }
 

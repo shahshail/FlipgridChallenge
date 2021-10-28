@@ -1,9 +1,11 @@
 package com.shahshail.android.flipgridchallenge.views.fragments
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.Intent.ACTION_VIEW
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -22,6 +24,10 @@ class ProfilePreviewFragment : Fragment() {
     //endregion
 
     //region Statics
+
+    companion object {
+        private const val TAG = "ProfilePreviewFragment"
+    }
 
     // endregion
 
@@ -118,11 +124,29 @@ class ProfilePreviewFragment : Fragment() {
     }
 
     private fun launchUserWebsite(url: String) {
-        val websiteUri = Uri.parse(url)
+        val websiteUri = Uri.parse(addProtocolPrefix(url))
         val implicitIntent = Intent(ACTION_VIEW).apply {
             data = websiteUri
         }
-        startActivity(implicitIntent)
+        try {
+            startActivity(implicitIntent)
+        } catch (e: ActivityNotFoundException) {
+            Log.e(TAG, "launchUserWebsite: ", e)
+        }
+    }
+
+    /**
+     * if the user does not have url protocol prefix
+     * file:// or https:// are valid so safe to user regex
+     */
+    private fun addProtocolPrefix(string: String?) : String? {
+        if (string == null) {
+            return null
+        }
+        if (!string.lowercase().matches(Regex("^\\w+://.*"))) {
+            return "http://$string";
+        }
+        return string
     }
 
     // endregion

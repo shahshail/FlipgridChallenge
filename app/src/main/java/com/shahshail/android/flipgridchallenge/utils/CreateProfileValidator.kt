@@ -60,12 +60,8 @@ class CreateProfileValidator @Inject constructor() {
             return list
         }
         val isValid = string.matches(Regex(FIRST_NAME_REGEX))
-        return if (isValid) {
-            list
-        } else {
-            list.add(CreateProfileErrorFlag.INVALID_FIRST_NAME)
-            list
-        }
+        if (!isValid) list.add(CreateProfileErrorFlag.INVALID_FIRST_NAME)
+        return list
     }
 
     fun validateEmailAddress(string: String?): List<CreateProfileErrorFlag> {
