@@ -48,6 +48,9 @@ class CreateProfileValidator @Inject constructor() {
         private const val PASSWORD_CAPITAL_PATTERN = "[A-Z]"
         private const val PASSWORD_DIGIT_PATTERN = "[0-9]"
         private const val PASSWORD_SPECIAL_CHAR_PATTER = "[^a-zA-Z0-9 ]"
+        private const val EMAIL_ADDRESS_PATTERN = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
+        // making http/https and www. optional
+        private const val WEBSITE_PATTERN = "^(http://|https://)?(www.)?([a-zA-Z0-9]+).[a-zA-Z0-9]*.[a-z]{3}.?([a-z]+)?\$"
     }
 
     fun validateFirstName(string: String?): List<CreateProfileErrorFlag> {
@@ -69,7 +72,7 @@ class CreateProfileValidator @Inject constructor() {
         val flags = mutableListOf<CreateProfileErrorFlag>()
         when {
             string.isNullOrBlank() -> flags.add(CreateProfileErrorFlag.MISSING_EMAIL_ADDRESS)
-            !Patterns.EMAIL_ADDRESS.matcher(string).matches() -> flags.add(CreateProfileErrorFlag.INVALID_EMAIL_ADDRESS)
+            !string.matches(Regex(EMAIL_ADDRESS_PATTERN)) -> flags.add(CreateProfileErrorFlag.INVALID_EMAIL_ADDRESS)
         }
       return flags
     }
@@ -105,7 +108,7 @@ class CreateProfileValidator @Inject constructor() {
         if (string.isNullOrBlank()) {
             return flag
         }
-        val isValid = Patterns.WEB_URL.matcher(string).matches()
+        val isValid = string.matches(Regex(WEBSITE_PATTERN))
         if (!isValid) {
             flag.add(CreateProfileErrorFlag.INVALID_WEB_URL)
         }
