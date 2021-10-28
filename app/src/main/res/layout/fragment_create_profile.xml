@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/create_profile_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/margin_normal"
+        tools:context=".views.CreateAccountFragment">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/create_profile_start_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="@dimen/start_constraint_guideline_percent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/create_profile_end_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="@dimen/end_constraint_guideline_percent" />
+
+        <include
+            android:id="@+id/create_profile_generic_layout"
+            layout="@layout/generic_profile_layout"
+            app:layout_constraintEnd_toEndOf="@id/create_profile_end_guideline"
+            app:layout_constraintStart_toStartOf="@id/create_profile_start_guideline"
+            app:layout_constraintTop_toTopOf="parent">
+        </include>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/create_profile_first_name_text_input_layout"
+            style="@style/TextInputLayoutStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
+            app:layout_constraintEnd_toEndOf="@id/create_profile_end_guideline"
+            app:layout_constraintStart_toStartOf="@id/create_profile_start_guideline"
+            app:layout_constraintTop_toBottomOf="@id/create_profile_generic_layout"
+            tools:hint="@string/first_name">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/create_profile_firstName_edit_text"
+                style="@style/TextInputEditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/create_profile_email_text_input_layout"
+            style="@style/TextInputLayoutStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
+            app:layout_constraintEnd_toEndOf="@id/create_profile_end_guideline"
+            app:layout_constraintStart_toStartOf="@id/create_profile_start_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/create_profile_first_name_text_input_layout"
+            tools:hint="@string/email_address">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/create_profile_email_edit_text"
+                style="@style/TextInputEditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/create_profile_password_text_input_layout"
+            style="@style/TextInputLayoutStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
+            app:endIconMode="password_toggle"
+            app:layout_constraintEnd_toEndOf="@id/create_profile_end_guideline"
+            app:layout_constraintStart_toStartOf="@id/create_profile_start_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/create_profile_email_text_input_layout"
+            tools:hint="@string/password">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/create_profile_password_edit_text"
+                style="@style/TextInputEditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/create_profile_website_text_input_layout"
+            style="@style/TextInputLayoutStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
+            app:layout_constraintEnd_toEndOf="@id/create_profile_end_guideline"
+            app:layout_constraintStart_toStartOf="@id/create_profile_start_guideline"
+            app:layout_constraintTop_toBottomOf="@id/create_profile_password_text_input_layout"
+            tools:hint="@string/website">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/create_profile_website_edit_text"
+                style="@style/TextInputEditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/create_profile_submit_button"
+            style="@style/BoarderLessButtonWithGradientStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:text="@string/submit"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/create_profile_end_guideline"
+            app:layout_constraintStart_toStartOf="@id/create_profile_start_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/create_profile_website_text_input_layout"
+            app:layout_constraintVertical_bias="1.0"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

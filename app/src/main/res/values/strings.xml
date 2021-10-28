@@ -1,3 +1,34 @@
 <resources>
     <string name="app_name">FlipgridChallenge</string>
+
+    <string name="first_name">First Name</string>
+    <string name="email_address">Email Address</string>
+    <string name="password">Password</string>
+    <string name="website">Website</string>
+    <string name="submit">Submit</string>
+    <string name="sign_in">Sign In</string>
+    <string name="tap_to_add_avatar">Tap to add avatar</string>
+    <string name="profile_creation_header">Profile creation</string>
+    <string name="profile_creation_instruction">Use the form below to submit your portfolio. An email and password are required.</string>
+    <string name="temp_profile_name_placeholder">there</string>
+    <string name="profile_greet_header">"Hello, %1$s!"</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="app_is_not_installed">App is not Installed</string>
+    <string name="install_camera_app_from_plastore">We require a camera app installed to add avatar. Do you want to install it from PlayStore?</string>
+
+    <!-- content description -->
+    <string name="avatar_image_content_description">Button for adding user\'s avatar</string>
+
+    <!-- validations -->
+    <string name="first_name_invalid">• Please enter a valid First Name.</string>
+    <string name="email_address_required">• Please enter Email Address.</string>
+    <string name="email_address_invalid">• Please enter a valid Email Address.</string>
+    <string name="password_required">• Please enter Password.</string>
+    <string name="password_missing_special_character">• Password must contain at lest one special character.</string>
+    <string name="password_missing_digit">• Password must contain at lest one digit.</string>
+    <string name="password_missing_capital">• Password must contain at lest one capital letter.</string>
+    <string name="website_invalid">• Please enter a valid website.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

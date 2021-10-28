@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/createProfileFragment">
+
+    <fragment
+        android:id="@+id/createProfileFragment"
+        android:name="com.shahshail.android.flipgridchallenge.views.fragments.CreateProfileFragment"
+        android:label="CreateProfileFragment">
+        <action
+            android:id="@+id/action_createProfile_to_profilePreview"
+            app:destination="@id/profilePreviewFragment">
+            <argument
+                android:name="userProfileDto"
+                android:defaultValue="@null"
+                app:argType="com.shahshail.android.flipgridchallenge.models.UserProfileDto"
+                app:nullable="true" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/profilePreviewFragment"
+        android:name="com.shahshail.android.flipgridchallenge.views.fragments.ProfilePreviewFragment"
+        android:label="profile_preview_fragment"
+        tools:layout="@layout/fragment_profile_preview" />
+
+</navigation>
