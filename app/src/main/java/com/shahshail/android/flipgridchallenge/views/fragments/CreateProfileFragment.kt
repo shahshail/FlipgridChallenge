@@ -19,8 +19,8 @@ package com.shahshail.android.flipgridchallenge.views.fragments
 
 import android.app.Activity
 import android.content.ActivityNotFoundException
-import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
@@ -28,12 +28,14 @@ import android.provider.MediaStore
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.google.android.material.textfield.TextInputEditText
@@ -57,15 +59,20 @@ class CreateProfileFragment : Fragment() {
     companion object {
         private const val TAG = "CreateProfileFragment"
         private const val IMAGE_DATA = "data"
+        private const val IMAGE_CAPTURE_REQUEST_CODE = 100
+        private const val SELECT_IMAGE_REQUEST_CODE = 101
     }
-    
+
     // endregion
 
     // region member variables
     val viewModel by viewModels<CreateProfileViewModel>()
-    private val imageCaptureRequestCode = 11
+
     @Inject
     lateinit var createProfileValidator: CreateProfileValidator
+
+    @Inject
+    lateinit var photoUtils: PhotoUtils
 
     private lateinit var profileHeaderTextView: TextView
     private lateinit var profileDescriptionTextView: TextView
@@ -99,12 +106,24 @@ class CreateProfileFragment : Fragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == imageCaptureRequestCode && resultCode == Activity.RESULT_OK) {
-            val imageBitmap = data?.extras?.get(IMAGE_DATA) as? Bitmap
-            imageBitmap?.let { bitmap ->
-                userProfileBitmap = bitmap
-                addAvatarTextView.visibility = View.GONE
-                addAvatarImageButton.setAvatarRoundedBitmap(bitmap)
+        when (requestCode) {
+            SELECT_IMAGE_REQUEST_CODE -> {
+                val uri = data?.data ?: return
+                val imageBitmap = photoUtils.getBitmapFromUri(uri)
+                imageBitmap?.let { bitmap ->
+                    setAvatarBitmap(bitmap)
+                }
+            }
+            IMAGE_CAPTURE_REQUEST_CODE -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    val imageBitmap = data?.extras?.get(IMAGE_DATA) as? Bitmap
+                    imageBitmap?.let { bitmap ->
+                        setAvatarBitmap(bitmap)
+                    }
+                }
+            }
+            else -> {
+                // do nothing
             }
         }
     }
@@ -114,6 +133,24 @@ class CreateProfileFragment : Fragment() {
         cameraAppNotInstalledDialog?.dismiss()
         userProfileBitmap?.let { bitmap ->
             viewModel.saveUserPicture(bitmap)
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        when (requestCode) {
+            PermissionsUtil.READ_STORAGE_PERMISSION_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults.first() == PackageManager.PERMISSION_GRANTED) {
+                    selectPhoto()
+                }
+            }
+
+            else -> {
+                // do nothing
+            }
         }
     }
 
@@ -184,12 +221,10 @@ class CreateProfileFragment : Fragment() {
         addAvatarTextView = findViewById(R.id.add_avatar_text_view)
         val cachedPicture = viewModel.getUserProfilePicture()
         cachedPicture?.let { bitmap ->
-            userProfileBitmap = bitmap
-            addAvatarTextView.visibility = View.GONE
-            addAvatarImageButton.setAvatarRoundedBitmap(bitmap)
+            setAvatarBitmap(bitmap)
         }
         addAvatarImageButton.setOnClickListener {
-            takePhoto()
+            openPhotoMenu()
         }
     }
 
@@ -212,13 +247,21 @@ class CreateProfileFragment : Fragment() {
                 val email = emailAddressEditText.text.toString().trim()
                 val password = passwordEditText.text.toString().trim()
                 val website = webUrlEditText.text?.toString()?.trim()
-                val userProfile = UserProfileDto(firstName, email, password, website, userProfileBitmap)
-                val action = CreateProfileFragmentDirections.actionCreateProfileToProfilePreview(userProfile)
+                val userProfile =
+                    UserProfileDto(firstName, email, password, website, userProfileBitmap)
+                val action =
+                    CreateProfileFragmentDirections.actionCreateProfileToProfilePreview(userProfile)
                 findNavController().navigate(action)
             } else {
                 Log.w(TAG, "setupSubmitButton: validations failed")
             }
         }
+    }
+
+    private fun setAvatarBitmap(bitmap: Bitmap) {
+        userProfileBitmap = bitmap
+        addAvatarTextView.visibility = View.GONE
+        addAvatarImageButton.setAvatarRoundedBitmap(bitmap)
     }
 
     private fun validateFirstName(): Boolean {
@@ -269,15 +312,40 @@ class CreateProfileFragment : Fragment() {
         layout.setErrorWithSeparator(errorList)
     }
 
+    private fun openPhotoMenu() {
+        val popup = PopupMenu(requireContext(), addAvatarImageButton)
+        popup.menuInflater.inflate(R.menu.menu_picture, popup.menu)
+        popup.setOnMenuItemClickListener { item: MenuItem ->
+            when (item.itemId) {
+                R.id.menu_take_photo -> {
+                    takePhoto()
+                }
+                R.id.menu_select_from_camera_roll -> {
+                    selectPhoto()
+                }
+            }
+            true
+        }
+        popup.show()
+    }
+
+
     private fun takePhoto() {
         // If we are using the camera by invoking an existing camera app, then we dont need to request permission.
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         try {
-            startActivityForResult(takePictureIntent, imageCaptureRequestCode)
+            startActivityForResult(takePictureIntent, IMAGE_CAPTURE_REQUEST_CODE)
         } catch (e: ActivityNotFoundException) {
             // if camera app is not installed then ask the user to install it from playstore
             Log.w(TAG, "takePhoto: camera app is not found...")
             showInstallCameraAppDialog()
+        }
+    }
+
+    private fun selectPhoto() {
+        val intent = photoUtils.getPhotoSelectIntent(this)
+        intent?.let { photoIntent ->
+            startActivityForResult(photoIntent, SELECT_IMAGE_REQUEST_CODE)
         }
     }
 
@@ -307,7 +375,12 @@ class CreateProfileFragment : Fragment() {
     private fun launchPlayStore() {
         try {
             // try to navigate to camera app
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=${Constants.GOOGLE_CAMERA_APP_ID}")))
+            startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("market://details?id=${Constants.GOOGLE_CAMERA_APP_ID}")
+                )
+            )
         } catch (e: ActivityNotFoundException) {
             // if the app is not found then simply launch playstore
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com")))
