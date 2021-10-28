@@ -31,5 +31,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        //need to clear bundle since reading stream has 1MB transaction limit
+        //It clears the Activity's bundle of the subsidiary fragments' bundles.
+        outState.clear()
+    }
+
     // endregion
 }
