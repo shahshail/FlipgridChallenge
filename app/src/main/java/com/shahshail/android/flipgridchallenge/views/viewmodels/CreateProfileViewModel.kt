@@ -17,12 +17,32 @@
  */
 package com.shahshail.android.flipgridchallenge.views.viewmodels
 
+import android.graphics.Bitmap
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
+/**
+ * ViewModel for create profile fragment
+ * using using saved state handle saving user data in configuration change for better performance
+ */
 @HiltViewModel
 class CreateProfileViewModel @Inject constructor(private val savedStateHandle: SavedStateHandle) : ViewModel() {
 
+    companion object {
+        private const val EXTRA_PROFILE_IMAGE = "extraProfileImage"
+    }
+
+    /**
+     * save user profile picture to survive configuration change
+     */
+    fun saveUserPicture(profileBitmap: Bitmap) = savedStateHandle.set(EXTRA_PROFILE_IMAGE, profileBitmap)
+
+    /**
+     * retrieves user profile picture from saved state
+     */
+    fun getUserProfilePicture(): Bitmap? = savedStateHandle.get(EXTRA_PROFILE_IMAGE)
 }

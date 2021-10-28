@@ -28,7 +28,7 @@
         <item name="shapeAppearance">@style/TextInputLayoutShapeAppearance</item>
         <item name="strokeColor">@color/light_gray</item>
         <item name="boxStrokeColor">@color/light_gray</item>
-        <item name="android:textColorHint">@color/light_gray</item>
+        <item name="android:textColorHint">@color/dark_gray</item>
         <item name="helperTextTextAppearance">@style/HelperTextAppearance</item>
         <item name="errorTextAppearance">@style/ErrorTextAppearance</item>
         <item name="errorIconDrawable">@null</item>

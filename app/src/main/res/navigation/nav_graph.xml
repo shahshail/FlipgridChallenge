@@ -11,7 +11,9 @@
         android:label="CreateProfileFragment">
         <action
             android:id="@+id/action_createProfile_to_profilePreview"
-            app:destination="@id/profilePreviewFragment">
+            app:destination="@id/profilePreviewFragment"
+            app:popUpTo="@+id/createProfileFragment"
+            app:popUpToInclusive="true">
             <argument
                 android:name="userProfileDto"
                 android:defaultValue="@null"

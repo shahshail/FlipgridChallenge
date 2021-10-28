@@ -18,7 +18,6 @@
 package com.shahshail.android.flipgridchallenge.utils
 
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.method.LinkMovementMethod

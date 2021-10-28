@@ -13,9 +13,9 @@
     <string name="temp_profile_name_placeholder">there</string>
     <string name="profile_greet_header">"Hello, %1$s!"</string>
     <string name="cancel">Cancel</string>
-    <string name="ok">OK</string>
+    <string name="store">Store</string>
     <string name="app_is_not_installed">App is not Installed</string>
-    <string name="install_camera_app_from_plastore">We require a camera app installed to add avatar. Do you want to install it from PlayStore?</string>
+    <string name="install_camera_app_from_plastore">We require a camera app installed to add an avatar. Do you want to install it from the PlayStore?</string>
 
     <!-- content description -->
     <string name="avatar_image_content_description">Button for adding user\'s avatar</string>
