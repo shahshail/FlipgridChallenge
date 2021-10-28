@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/profile_preview_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/margin_normal"
+        tools:context=".views.CreateAccountFragment">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/profile_preview_start_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="@dimen/start_constraint_guideline_percent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/profile_preview_end_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="@dimen/end_constraint_guideline_percent" />
+
+        <include
+            android:id="@+id/profile_preview_generic_layout"
+            layout="@layout/generic_profile_layout"
+            app:layout_constraintEnd_toEndOf="@id/profile_preview_end_guideline"
+            app:layout_constraintStart_toStartOf="@id/profile_preview_start_guideline"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/website_text_view"
+            style="@style/LinkTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_large"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/profile_preview_generic_layout"
+            tools:text="google.com" />
+
+        <TextView
+            android:id="@+id/profile_preview_first_name_text_view"
+            style="@style/SecondaryTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_large"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/website_text_view"
+            tools:text="abcd@efgh.com" />
+
+        <TextView
+            android:id="@+id/profile_preview_email_text_view"
+            style="@style/SecondaryTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_large"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/profile_preview_first_name_text_view"
+            tools:text="My awesome name" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/profile_preview_submit_button"
+            style="@style/BoarderLessButtonWithGradientStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:text="@string/sign_in"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/profile_preview_end_guideline"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@id/profile_preview_start_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/profile_preview_email_text_view"
+            app:layout_constraintVertical_bias="1.0" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

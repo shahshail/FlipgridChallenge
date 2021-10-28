@@ -19,8 +19,10 @@ package com.shahshail.android.flipgridchallenge.views.fragments
 
 import android.app.Activity
 import android.content.ActivityNotFoundException
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import androidx.fragment.app.Fragment
@@ -29,8 +31,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.shahshail.android.flipgridchallenge.R
@@ -53,7 +57,7 @@ class CreateProfileFragment : Fragment() {
 
     // region member variables
     val viewModel by viewModels<CreateProfileViewModel>()
-
+    private val imageCaptureRequestCode = 11
     @Inject
     lateinit var createProfileValidator: CreateProfileValidator
 
@@ -70,7 +74,7 @@ class CreateProfileFragment : Fragment() {
     private lateinit var webUrlTextInputLayout: TextInputLayout
     private lateinit var webUrlEditText: TextInputEditText
     private lateinit var submitButton: AppCompatButton
-    private val imageCaptureRequestCode = 11
+    private var cameraAppNotInstalledDialog: AlertDialog? = null
 
     // endregion
 
@@ -95,6 +99,11 @@ class CreateProfileFragment : Fragment() {
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        cameraAppNotInstalledDialog?.dismiss()
+    }
+
     //endregion
 
     // region private functions
@@ -117,8 +126,8 @@ class CreateProfileFragment : Fragment() {
     }
 
     private fun setupFirstName(view: View) = with(view) {
-        firstNameTextInputLayout = findViewById(R.id.first_name_text_input_layout)
-        firstNameEditText = findViewById(R.id.firstName_edit_text)
+        firstNameTextInputLayout = findViewById(R.id.create_profile_first_name_text_input_layout)
+        firstNameEditText = findViewById(R.id.create_profile_firstName_edit_text)
         firstNameTextInputLayout.hint = getString(R.string.first_name)
         firstNameEditText.afterTextChanged {
             firstNameTextInputLayout.clearError()
@@ -126,8 +135,8 @@ class CreateProfileFragment : Fragment() {
     }
 
     private fun setupEmailAddress(view: View) = with(view) {
-        emailAddressTextInputLayout = findViewById(R.id.email_text_input_layout)
-        emailAddressEditText = findViewById(R.id.email_edit_text)
+        emailAddressTextInputLayout = findViewById(R.id.create_profile_email_text_input_layout)
+        emailAddressEditText = findViewById(R.id.create_profile_email_edit_text)
         emailAddressTextInputLayout.hint = getString(R.string.email_address)
         emailAddressEditText.afterTextChanged {
             emailAddressTextInputLayout.clearError()
@@ -135,8 +144,8 @@ class CreateProfileFragment : Fragment() {
     }
 
     private fun setupPassword(view: View) = with(view) {
-        passwordTextInputLayout = findViewById(R.id.password_text_input_layout)
-        passwordEditText = findViewById(R.id.password_edit_text)
+        passwordTextInputLayout = findViewById(R.id.create_profile_password_text_input_layout)
+        passwordEditText = findViewById(R.id.create_profile_password_edit_text)
         passwordTextInputLayout.hint = getString(R.string.password)
         passwordEditText.afterTextChanged {
             passwordTextInputLayout.clearError()
@@ -144,8 +153,8 @@ class CreateProfileFragment : Fragment() {
     }
 
     private fun setupWebUrl(view: View) = with(view) {
-        webUrlTextInputLayout = findViewById(R.id.website_text_input_layout)
-        webUrlEditText = findViewById(R.id.website_edit_text)
+        webUrlTextInputLayout = findViewById(R.id.create_profile_website_text_input_layout)
+        webUrlEditText = findViewById(R.id.create_profile_website_edit_text)
         webUrlTextInputLayout.hint = getString(R.string.website)
         webUrlEditText.afterTextChanged {
             webUrlTextInputLayout.clearError()
@@ -161,7 +170,7 @@ class CreateProfileFragment : Fragment() {
     }
 
     private fun setupSubmitButton(view: View) = with(view) {
-        submitButton = findViewById(R.id.submit_button)
+        submitButton = findViewById(R.id.create_profile_submit_button)
         submitButton.setOnClickListener {
             val validations = listOf(
                 validateFirstName(),
@@ -175,6 +184,8 @@ class CreateProfileFragment : Fragment() {
                 val password = passwordEditText.text.toString()
                 val website = webUrlEditText.text?.toString()
                 val userProfile = UserProfileDto(firstName, email, password, website, null)
+                val action = CreateProfileFragmentDirections.actionCreateProfileToProfilePreview(userProfile)
+                findNavController().navigate(action)
             }
         }
     }
@@ -233,10 +244,42 @@ class CreateProfileFragment : Fragment() {
         try {
             startActivityForResult(takePictureIntent, imageCaptureRequestCode)
         } catch (e: ActivityNotFoundException) {
+            // if camera app is not installed then ask the user to install it from playstore
+            showInstallCameraAppDialog()
+        }
+    }
 
+    private fun showInstallCameraAppDialog() {
+        if (cameraAppNotInstalledDialog?.isShowing == true) {
+            cameraAppNotInstalledDialog?.dismiss()
+        }
+
+        cameraAppNotInstalledDialog = activity?.let {
+            val builder = AlertDialog.Builder(it)
+            builder.apply {
+                setTitle(R.string.app_is_not_installed)
+                setMessage(R.string.install_camera_app_from_plastore)
+                setPositiveButton(R.string.ok) { dialog, id ->
+                    launchPlayStore()
+                }
+                setNegativeButton(R.string.cancel) { dialog, id ->
+                    dialog.dismiss()
+                }
+            }
+            builder.create()
+        }
+        cameraAppNotInstalledDialog?.show()
+    }
+
+    private fun launchPlayStore() {
+        try {
+            // try to navigate to camera app
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=${Constants.GOOGLE_CAMERA_APP_ID}")))
+        } catch (e: ActivityNotFoundException) {
+            // if the app is not found then simply launch playstore
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com")))
         }
     }
 
     // endregion
-
 }
