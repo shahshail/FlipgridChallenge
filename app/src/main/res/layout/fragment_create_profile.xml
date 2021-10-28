@@ -13,6 +13,7 @@
         android:layout_margin="@dimen/margin_normal"
         tools:context=".views.CreateAccountFragment">
 
+        <!-- guidelines are useful for better support tablet screens, need to change percent values based on requirement -->
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/create_profile_start_guideline"
             android:layout_width="wrap_content"
@@ -32,8 +33,7 @@
             layout="@layout/generic_profile_layout"
             app:layout_constraintEnd_toEndOf="@id/create_profile_end_guideline"
             app:layout_constraintStart_toStartOf="@id/create_profile_start_guideline"
-            app:layout_constraintTop_toTopOf="parent">
-        </include>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/create_profile_first_name_text_input_layout"
@@ -50,7 +50,8 @@
                 android:id="@+id/create_profile_firstName_edit_text"
                 style="@style/TextInputEditTextStyle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:inputType="text" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -111,7 +112,8 @@
                 android:id="@+id/create_profile_website_edit_text"
                 style="@style/TextInputEditTextStyle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:inputType="text" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -126,7 +128,7 @@
             app:layout_constraintEnd_toEndOf="@id/create_profile_end_guideline"
             app:layout_constraintStart_toStartOf="@id/create_profile_start_guideline"
             app:layout_constraintTop_toBottomOf="@+id/create_profile_website_text_input_layout"
-            app:layout_constraintVertical_bias="1.0"/>
+            app:layout_constraintVertical_bias="1.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
