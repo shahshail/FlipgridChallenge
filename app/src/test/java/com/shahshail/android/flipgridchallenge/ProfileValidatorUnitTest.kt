@@ -9,7 +9,7 @@ import org.junit.Before
 /**
  * Unit test coverage for CreateProfileValidator
  */
-class ExampleUnitTest {
+class ProfileValidatorUnitTest {
 
     private lateinit var profileValidator: CreateProfileValidator
 
